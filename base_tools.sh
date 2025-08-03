@@ -21,34 +21,6 @@ for tool in "${BASE_TOOLS[@]}"; do
   install_package "$tool" "$LOG"
 done
 
-# Joshuto tratado aparte para evitar ERROR innecesario
-echo -e "${INFO} Instalando Joshuto..." | tee -a "$LOG"
-
-if command -v joshuto &>/dev/null; then
-  echo -e "${NOTE} Joshuto ya está instalado. Se omite." | tee -a "$LOG"
-else
-  echo -e "${NOTE} Intentando instalar joshuto desde gestor de paquetes..." | tee -a "$LOG"
-  if (sudo dnf install -y joshuto 2>>"$LOG" || sudo apt install -y joshuto 2>>"$LOG" || sudo pacman -S --noconfirm joshuto 2>>"$LOG"); then
-    echo -e "${OK} Joshuto instalado correctamente desde gestor de paquetes." | tee -a "$LOG"
-  else
-    echo -e "${NOTE} No se pudo instalar joshuto desde gestor. Se intentará desde código fuente..." | tee -a "$LOG"
-
-    if ! command -v rustc &>/dev/null || ! command -v cargo &>/dev/null; then
-      echo -e "${INFO} Rust no detectado. Instalando..." | tee -a "$LOG"
-      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y | tee -a "$LOG"
-      source "$HOME/.cargo/env"
-    fi
-
-    cargo install joshuto | tee -a "$LOG"
-
-    if command -v joshuto &>/dev/null; then
-      echo -e "${OK} Joshuto instalado correctamente desde código fuente." | tee -a "$LOG"
-    else
-      echo -e "${ERROR} No se pudo instalar Joshuto. Verifica dependencias manualmente." | tee -a "$LOG"
-    fi
-  fi
-fi
-
 # Instalar RustDesk
 echo -e "${INFO} Instalando RustDesk..." | tee -a "$LOG"
 case "$DISTRO" in

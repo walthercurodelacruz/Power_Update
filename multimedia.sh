@@ -1,5 +1,5 @@
 # === multimedia.sh ===
-# Instalación de codecs multimedia y editor de video Shotcut (sin ffmpeg)
+# Instalación de codecs multimedia, VLC y editor de video Shotcut
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
@@ -55,6 +55,9 @@ case "$DISTRO" in
     echo -e "${ERROR} Distribución $DISTRO no soportada para Shotcut." | tee -a "$LOG"
     ;;
 esac
+
+echo -e "${INFO} Instalando reproductor multimedia VLC..." | tee -a "$LOG"
+install_package vlc "$LOG"
 
 echo -e "${OK} Multimedia configurado correctamente." | tee -a "$LOG"
 

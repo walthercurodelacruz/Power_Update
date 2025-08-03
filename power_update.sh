@@ -62,13 +62,13 @@ declare -A MODULES=(
 )
 
 declare -A MODULE_APPS=(
-  [system_update]="→ Actualiza todos los paquetes del sistema"
-  [base_tools]="→ htop, btop, smartmontools, testdisk, inxi, timeshift"
+  [system_update]="→ Actualiza todos los paquetes del sistema e instala el tema Yaru (Ubuntu/Fedora)"
+  [base_tools]="→ htop, btop, smartmontools, testdisk, inxi, timeshift, joshuto, rustdesk"
   [net_support]="→ netcat, nethogs, iftop, whois, dig, arp-scan"
-  [security_tools]="→ nmap, masscan, hping3, hydra, gobuster, wireshark, tcpdump, ettercap, proxychains-ng, macchanger, aircrack-ng"
+  [security_tools]="→ nmap, masscan, hping3, hydra, gobuster, wireshark, tcpdump, ettercap, proxychains-ng, macchanger, aircrack-ng, sqlmap, whatweb"
   [fastfetch]="→ fastfetch"
   [multimedia]="→ Codecs multimedia, gstreamer, Shotcut"
-  [dev_tools]="→ nodejs, npm, Visual Studio Code"
+  [dev_tools]="→ nodejs, npm, Visual Studio Code, DBeaver"
   [wine_unrar]="→ wine, winetricks, unrar"
 )
 

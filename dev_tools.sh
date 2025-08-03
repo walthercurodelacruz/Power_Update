@@ -1,5 +1,5 @@
 # === dev_tools.sh ===
-# Herramientas de desarrollo: Node.js, npm y Visual Studio Code
+# Herramientas de desarrollo: Node.js, npm, Visual Studio Code y DBeaver
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
@@ -11,7 +11,6 @@ install_package nodejs "$LOG"
 install_package npm "$LOG"
 
 echo -e "${INFO} Instalando Visual Studio Code..." | tee -a "$LOG"
-
 case "$DISTRO" in
   ubuntu|debian)
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -41,4 +40,23 @@ case "$DISTRO" in
     ;;
 esac
 
+echo -e "${INFO} Instalando DBeaver..." | tee -a "$LOG"
+case "$DISTRO" in
+  ubuntu|debian)
+    wget -O /tmp/dbeaver.deb https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb | tee -a "$LOG"
+    sudo apt install -y /tmp/dbeaver.deb | tee -a "$LOG"
+    ;;
+  fedora)
+    wget -O /tmp/dbeaver.rpm https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm | tee -a "$LOG"
+    sudo dnf install -y /tmp/dbeaver.rpm | tee -a "$LOG"
+    ;;
+  arch)
+    yay -S dbeaver --noconfirm | tee -a "$LOG"
+    ;;
+  *)
+    echo -e "${ERROR} Distribución $DISTRO no soportada para DBeaver." | tee -a "$LOG"
+    ;;
+esac
+
 echo -e "${OK} Herramientas de desarrollo instaladas correctamente." | tee -a "$LOG"
+

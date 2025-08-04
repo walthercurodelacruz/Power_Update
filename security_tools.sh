@@ -1,5 +1,5 @@
 # === security_tools.sh ===
-# Herramientas de hacking ético y ciberseguridad
+# Herramientas de ciberseguridad ofensiva y diagnóstico
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
@@ -8,43 +8,53 @@ source "$SCRIPT_DIR/Global_functions.sh"
 
 echo -e "${INFO} Instalando herramientas de ciberseguridad..." | tee -a "$LOG"
 
-SECURITY_TOOLS=(
+TOOLS=(
   nmap
-  masscan
-  hping3
   hydra
+  john
   gobuster
-  wireshark
-  tcpdump
-  ettercap
-  proxychains-ng
-  macchanger
   aircrack-ng
   whatweb
+  hping3
+  cracklib-dicts
+  masscan
 )
 
-for tool in "${SECURITY_TOOLS[@]}"; do
+for tool in "${TOOLS[@]}"; do
   install_package "$tool" "$LOG"
 done
 
-# Instalación alternativa de sqlmap si no se encuentra por paquete
+# === Sqlmap (fallback con pip --user) ===
 if ! command -v sqlmap &>/dev/null; then
   echo -e "${NOTE} Instalando sqlmap desde pip..." | tee -a "$LOG"
-
-  if ! command -v pip3 &>/dev/null; then
-    echo -e "${INFO} pip3 no detectado. Instalando..." | tee -a "$LOG"
-    install_package python3-pip "$LOG"
-  fi
-
-  pip3 install --upgrade sqlmap | tee -a "$LOG"
+  pip install --user sqlmap | tee -a "$LOG"
+  export PATH="$HOME/.local/bin:$PATH"
 
   if command -v sqlmap &>/dev/null; then
-    echo -e "${OK} sqlmap instalado correctamente desde pip." | tee -a "$LOG"
+    echo -e "${OK} Sqlmap instalado correctamente desde pip (modo usuario)." | tee -a "$LOG"
   else
     echo -e "${ERROR} No se pudo instalar sqlmap. Verifica manualmente." | tee -a "$LOG"
   fi
 else
-  echo -e "${OK} sqlmap ya está instalado en el sistema." | tee -a "$LOG"
+  echo -e "${NOTE} Sqlmap ya está instalado. Se omite." | tee -a "$LOG"
+fi
+
+# === Wordlists multiplataforma ===
+WORDLIST_DIR="$HOME/wordlists"
+mkdir -p "$WORDLIST_DIR"
+
+if [[ ! -f "$WORDLIST_DIR/rockyou.txt" ]]; then
+  echo -e "${NOTE} Descargando wordlist rockyou.txt..." | tee -a "$LOG"
+  curl -L https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt \
+    -o "$WORDLIST_DIR/rockyou.txt" | tee -a "$LOG"
+
+  if [[ -f "$WORDLIST_DIR/rockyou.txt" ]]; then
+    echo -e "${OK} Wordlist rockyou.txt descargada correctamente." | tee -a "$LOG"
+  else
+    echo -e "${ERROR} No se pudo descargar rockyou.txt. Verifica conexión." | tee -a "$LOG"
+  fi
+else
+  echo -e "${NOTE} rockyou.txt ya está presente en $WORDLIST_DIR. Se omite." | tee -a "$LOG"
 fi
 
 echo -e "${OK} Herramientas de seguridad instaladas correctamente." | tee -a "$LOG"

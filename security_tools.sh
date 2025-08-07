@@ -24,21 +24,6 @@ for tool in "${TOOLS[@]}"; do
   install_package "$tool" "$LOG"
 done
 
-# === Sqlmap (fallback con pip --user) ===
-if ! command -v sqlmap &>/dev/null; then
-  echo -e "${NOTE} Instalando sqlmap desde pip..." | tee -a "$LOG"
-  pip install --user sqlmap | tee -a "$LOG"
-  export PATH="$HOME/.local/bin:$PATH"
-
-  if command -v sqlmap &>/dev/null; then
-    echo -e "${OK} Sqlmap instalado correctamente desde pip (modo usuario)." | tee -a "$LOG"
-  else
-    echo -e "${ERROR} No se pudo instalar sqlmap. Verifica manualmente." | tee -a "$LOG"
-  fi
-else
-  echo -e "${NOTE} Sqlmap ya está instalado. Se omite." | tee -a "$LOG"
-fi
-
 # === Wordlists multiplataforma ===
 WORDLIST_DIR="$HOME/wordlists"
 mkdir -p "$WORDLIST_DIR"

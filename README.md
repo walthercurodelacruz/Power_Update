@@ -8,7 +8,7 @@
 
 ### ✨ ¿Qué es Power Update?
 
-**Power Update** es una suite **modular, elegante y automatizada** para configurar cualquier distribución Linux justo después de la instalación. Compatible con **Debian/Ubuntu**, **Fedora** y **Arch**, este proyecto instala herramientas clave para desarrolladores, entusiastas de la ciberseguridad, soporte técnico, multimedia y mucho más.
+**Power Update** es una suite **modular y automatizada** para configurar cualquier distribución Linux justo después de la instalación. Compatible con **Debian/Ubuntu**, **Fedora** y **Arch**, este proyecto instala herramientas clave para desarrolladores, entusiastas de la ciberseguridad, soporte técnico, multimedia y mucho más.
 
 ---
 
@@ -30,7 +30,7 @@
 | `system_update`    | Actualiza todos los paquetes y aplica tema Yaru si estás en Ubuntu o Fedora |
 | `base_tools`       | Herramientas esenciales: `htop`, `btop`, `testdisk`, `joshuto`, `rustdesk`  |
 | `net_support`      | Diagnóstico de red: `netcat`, `iftop`, `nethogs`, `arp-scan`                |
-| `security_tools`   | Ciberseguridad: `nmap`, `hydra`, `sqlmap`, `whatweb`, `aircrack-ng`, etc.   |
+| `security_tools`   | Ciberseguridad: `nmap`, `hydra`, `whatweb`, `aircrack-ng`, etc.             |
 | `fastfetch`        | Información visual del sistema en terminal                                  |
 | `multimedia`       | Codecs + `Shotcut` + `VLC`                                                  |
 | `dev_tools`        | `Node.js`, `npm`, `VS Code`, `DBeaver`                                      |

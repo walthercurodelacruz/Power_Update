@@ -1,7 +1,7 @@
 # === multimedia.sh ===
 # Instalación de codecs multimedia, VLC y editor de video Shotcut
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_multimedia.log"
 source "$SCRIPT_DIR/Global_functions.sh"
@@ -12,8 +12,20 @@ case "$DISTRO" in
   ubuntu|debian)
     install_package ubuntu-restricted-extras "$LOG"
     install_package libavcodec-extra "$LOG"
-    install_package libdvd-pkg "$LOG"
-    sudo dpkg-reconfigure libdvd-pkg | tee -a "$LOG"
+    if ! dpkg -s libdvd-pkg &>/dev/null; then
+        echo -e "${INFO} Preconfigurando libdvd-pkg..." | tee -a "$LOG"
+        sudo debconf-set-selections <<EOF
+libdvd-pkg libdvd-pkg/build boolean true
+libdvd-pkg libdvd-pkg/upgrade note
+libdvd-pkg libdvd-pkg/post-invoke_hook-remove boolean false
+libdvd-pkg libdvd-pkg/post-invoke_hook-install boolean true
+libdvd-pkg libdvd-pkg/first-install note
+EOF
+        sudo DEBIAN_FRONTEND=noninteractive apt install -y libdvd-pkg | tee -a "$LOG"
+    else
+        echo -e "${NOTE} Paquete ya instalado: libdvd-pkg. Se omite." | tee -a "$LOG"
+    fi
+    sudo DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive libdvd-pkg | tee -a "$LOG"
     ;;
 
   fedora)

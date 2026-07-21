@@ -40,7 +40,7 @@
 
 ### 📸 Vista previa (terminal)
 
-![Captura del menú interactivo](https://raw.githubusercontent.com/walthercurodelacruz/Power_Update/refs/heads/principal/Powe_Update.png)
+![Captura del menú interactivo](https://raw.githubusercontent.com/walthercurodelacruz/Power_Update/refs/heads/principal/imagenes/Powe_Update.png)
 
 ---
 

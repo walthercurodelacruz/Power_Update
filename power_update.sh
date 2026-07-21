@@ -103,9 +103,9 @@ read -r continuar
 MODULES_DONE=()
 for module in "${SELECTION[@]}"; do
     if [ "$module" == "gtk_themes" ] || [ "$module" == "multimedia" ]; then
-        [ "$HAS_GUI" = true ] && source "$SCRIPT_DIR/$module.sh" && MODULES_DONE+=("$module") || echo -e "${NOTE} Sin GUI, se omite $module."
+        [ "$HAS_GUI" = true ] && source "$SCRIPT_DIR/modulos/$module.sh" && MODULES_DONE+=("$module") || echo -e "${NOTE} Sin GUI, se omite $module."
     else
-        source "$SCRIPT_DIR/$module.sh"
+        source "$SCRIPT_DIR/modulos/$module.sh"
         MODULES_DONE+=("$module")
     fi
     sleep 1

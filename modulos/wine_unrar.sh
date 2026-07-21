@@ -1,7 +1,7 @@
 # === wine_unrar.sh ===
 # Soporte para archivos .rar y compatibilidad con software Windows
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_wine_unrar.log"
 source "$SCRIPT_DIR/Global_functions.sh"

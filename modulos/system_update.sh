@@ -1,6 +1,6 @@
 # === system_update.sh ===
 # Actualiza completamente el sistema según la distribución detectada
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/update-$(date +%d-%H%M%S).log"
 source "$SCRIPT_DIR/Global_functions.sh"

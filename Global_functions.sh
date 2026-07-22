@@ -11,31 +11,74 @@ RESET="\033[0m"
 # === Función para instalar paquetes con detección de gestor ===
 install_package() {
     local pkg="$1"
-    if command -v dnf &>/dev/null; then
+    local log_file="$2"
+    
+    if [ -z "$DISTRO" ]; then
+        if [ -f /etc/os-release ]; then
+            . /etc/os-release
+            DISTRO=$ID
+        fi
+    fi
+    
+    # Mapeo de nombres de paquetes por distribución
+    if [[ "$DISTRO" == "ubuntu" || "$DISTRO" == "debian" ]]; then
+        case "$pkg" in
+            dig) pkg="bind9-dnsutils" ;;
+            netcat) pkg="netcat-openbsd" ;;
+            cracklib-dicts) pkg="cracklib-runtime" ;;
+        esac
+    elif [[ "$DISTRO" == "fedora" ]]; then
+        case "$pkg" in
+            dig) pkg="bind-utils" ;;
+            netcat) pkg="nc" ;;
+            cracklib-dicts) pkg="cracklib-dicts" ;;
+        esac
+
+    fi
+
+    local status=0
+
+    if command -v dnf5 &>/dev/null || command -v dnf &>/dev/null; then
         if rpm -q "$pkg" &>/dev/null; then
             echo -e "${NOTE} Paquete ya instalado: $pkg. Se omite."
             return 0
         fi
-        sudo dnf install -y "$pkg"
+        local pm="dnf"
+        command -v dnf5 &>/dev/null && pm="dnf5"
+        if [ -n "$log_file" ]; then
+            sudo $pm install -y "$pkg" 2>&1 | tee -a "$log_file"
+            status=${PIPESTATUS[0]}
+        else
+            sudo $pm install -y "$pkg"
+            status=$?
+        fi
     elif command -v apt &>/dev/null; then
         if dpkg -s "$pkg" &>/dev/null; then
             echo -e "${NOTE} Paquete ya instalado: $pkg. Se omite."
             return 0
         fi
-        sudo apt install -y "$pkg"
-    elif command -v pacman &>/dev/null; then
-        if pacman -Q "$pkg" &>/dev/null; then
-            echo -e "${NOTE} Paquete ya instalado: $pkg. Se omite."
-            return 0
+        if [ -n "$log_file" ]; then
+            sudo DEBIAN_FRONTEND=noninteractive apt install -y "$pkg" 2>&1 | tee -a "$log_file"
+            status=${PIPESTATUS[0]}
+        else
+            sudo DEBIAN_FRONTEND=noninteractive apt install -y "$pkg"
+            status=$?
         fi
-        sudo pacman -S --noconfirm "$pkg"
+
     else
         echo -e "${ERROR} Gestor de paquetes no compatible."
         return 1
     fi
-    if [[ $? -eq 0 ]]; then
-        echo -e "${OK} Instalado correctamente: $pkg"
+
+    if [[ $status -eq 0 ]]; then
+        echo -e "${OK} Instalado correctamente: $pkg" | tee -a "$log_file"
+        return 0
     else
-        echo -e "${ERROR} Falló la instalación de: $pkg"
+        if [ "$pkg" = "whatweb" ] && [ "$DISTRO" = "fedora" ]; then
+            echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite." | tee -a "$log_file"
+            return 0
+        fi
+        echo -e "${ERROR} Falló la instalación de: $pkg" | tee -a "$log_file"
+        return 1
     fi
 }

@@ -6,13 +6,16 @@ mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_fastfetch.log"
 source "$SCRIPT_DIR/Global_functions.sh"
 
-install_package "fastfetch" "$LOG"
+if [[ " $SELECTED_FASTFETCH " =~ " fastfetch " ]]; then
+    install_package "fastfetch" "$LOG"
+fi
 
-CONFIG_PATH="$HOME/.config/fastfetch/config-compact.jsonc"
-if [ ! -f "$CONFIG_PATH" ]; then
-    echo -e "${INFO} Creando configuración mínima para fastfetch..." | tee -a "$LOG"
-    mkdir -p "$(dirname "$CONFIG_PATH")"
-    cat <<EOF > "$CONFIG_PATH"
+if [[ " $SELECTED_FASTFETCH " =~ " config " ]]; then
+    CONFIG_PATH="$HOME/.config/fastfetch/config-compact.jsonc"
+    if [ ! -f "$CONFIG_PATH" ]; then
+        echo -e "${INFO} Creando configuración mínima para fastfetch..." | tee -a "$LOG"
+        mkdir -p "$(dirname "$CONFIG_PATH")"
+        cat <<EOF > "$CONFIG_PATH"
 {
   "modules": [
     "title",
@@ -23,8 +26,9 @@ if [ ! -f "$CONFIG_PATH" ]; then
   ]
 }
 EOF
-else
-    echo -e "${NOTE} Configuración ya existe. No se sobrescribirá." | tee -a "$LOG"
+    else
+        echo -e "${NOTE} Configuración ya existe. No se sobrescribirá." | tee -a "$LOG"
+    fi
 fi
 
 echo -e "${OK} Fastfetch configurado correctamente." | tee -a "$LOG"

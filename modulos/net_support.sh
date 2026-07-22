@@ -18,7 +18,9 @@ NET_TOOLS=(
 )
 
 for tool in "${NET_TOOLS[@]}"; do
-  install_package "$tool" "$LOG"
+  if [[ " $SELECTED_NET_SUPPORT " =~ " $tool " ]]; then
+    install_package "$tool" "$LOG"
+  fi
 done
 
 echo -e "${OK} Herramientas de red instaladas correctamente." | tee -a "$LOG"

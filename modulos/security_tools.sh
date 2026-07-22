@@ -16,7 +16,6 @@ TOOLS=(
   john
   gobuster
   aircrack-ng
-  whatweb
   hping3
   cracklib-dicts
   masscan

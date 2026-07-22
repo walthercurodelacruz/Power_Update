@@ -34,7 +34,7 @@
 |--------------------|------------------------------------------------------------------------------|
 | `base_tools`       | `htop`, `btop`, `smartmontools`, `testdisk`, `inxi`, `timeshift`             |
 | `net_support`      | `netcat`, `nethogs`, `iftop`, `whois`, `dig`, `arp-scan`                     |
-| `security_tools`   | `nmap`, `hydra`, `john`, `gobuster`, `aircrack-ng`, `whatweb`, `hping3`, `cracklib-dicts`, `masscan`, `rockyou` |
+| `security_tools`   | `nmap`, `hydra`, `john`, `gobuster`, `aircrack-ng`, `hping3`, `cracklib-dicts`, `masscan`, `rockyou` |
 | `fastfetch`        | Instalador de `fastfetch` + generación de configuración mínima compacta      |
 | `multimedia`       | Codecs multimedia propietarios (`gstreamer`, `avcodec`) + reproductor `VLC`  |
 | `dev_tools`        | `Node.js`, `npm`, `VS Code`, `DBeaver`                                       |

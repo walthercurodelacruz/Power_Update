@@ -79,14 +79,7 @@ install_package() {
         fi
         return 0
     else
-        if [ "$pkg" = "whatweb" ] && [ "$DISTRO" = "fedora" ]; then
-            if [ -n "$log_file" ]; then
-                echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite." | tee -a "$log_file"
-            else
-                echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite."
-            fi
-            return 0
-        fi
+
         if [ -n "$log_file" ]; then
             echo -e "${ERROR} Falló la instalación de: $pkg" | tee -a "$log_file"
         else

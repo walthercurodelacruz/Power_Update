@@ -1,6 +1,8 @@
 # === dev_tools.sh ===
 # Herramientas de desarrollo: Node.js, npm, Visual Studio Code y DBeaver
 
+set -o pipefail
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_dev_tools.log"
@@ -33,7 +35,6 @@ if [[ " $SELECTED_DEV_TOOLS " =~ " vscode " ]]; then
       sudo dnf check-update | tee -a "$LOG"
       install_package code "$LOG"
       ;;
-
     *)
       echo -e "${ERROR} Distribución $DISTRO no soportada para VSCode." | tee -a "$LOG"
       ;;
@@ -42,16 +43,21 @@ fi
 
 if [[ " $SELECTED_DEV_TOOLS " =~ " dbeaver " ]]; then
   echo -e "${INFO} Instalando DBeaver..." | tee -a "$LOG"
+  
+  # Crear un directorio temporal seguro con permisos restringidos
+  TMP_DIR=$(mktemp -d -t dbeaver_install_XXXXXX)
+  chmod 700 "$TMP_DIR"
+  trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
+
   case "$DISTRO" in
     ubuntu|debian)
-      wget -O /tmp/dbeaver.deb https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb | tee -a "$LOG"
-      sudo apt install -y /tmp/dbeaver.deb | tee -a "$LOG"
+      wget -O "$TMP_DIR/dbeaver.deb" https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb | tee -a "$LOG"
+      sudo apt install -y "$TMP_DIR/dbeaver.deb" | tee -a "$LOG"
       ;;
     fedora)
-      wget -O /tmp/dbeaver.rpm https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm | tee -a "$LOG"
-      sudo dnf install -y /tmp/dbeaver.rpm | tee -a "$LOG"
+      wget -O "$TMP_DIR/dbeaver.rpm" https://dbeaver.io/files/dbeaver-ce-latest-stable.x86_64.rpm | tee -a "$LOG"
+      sudo dnf install -y "$TMP_DIR/dbeaver.rpm" | tee -a "$LOG"
       ;;
-
     *)
       echo -e "${ERROR} Distribución $DISTRO no soportada para DBeaver." | tee -a "$LOG"
       ;;

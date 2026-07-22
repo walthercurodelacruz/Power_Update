@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o pipefail
 
 # === Colores ===
 OK="\033[1;32m[OK]\033[0m"
@@ -71,14 +72,26 @@ install_package() {
     fi
 
     if [[ $status -eq 0 ]]; then
-        echo -e "${OK} Instalado correctamente: $pkg" | tee -a "$log_file"
+        if [ -n "$log_file" ]; then
+            echo -e "${OK} Instalado correctamente: $pkg" | tee -a "$log_file"
+        else
+            echo -e "${OK} Instalado correctamente: $pkg"
+        fi
         return 0
     else
         if [ "$pkg" = "whatweb" ] && [ "$DISTRO" = "fedora" ]; then
-            echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite." | tee -a "$log_file"
+            if [ -n "$log_file" ]; then
+                echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite." | tee -a "$log_file"
+            else
+                echo -e "${NOTE} whatweb no está disponible en repositorios oficiales de Fedora. Se omite."
+            fi
             return 0
         fi
-        echo -e "${ERROR} Falló la instalación de: $pkg" | tee -a "$log_file"
+        if [ -n "$log_file" ]; then
+            echo -e "${ERROR} Falló la instalación de: $pkg" | tee -a "$log_file"
+        else
+            echo -e "${ERROR} Falló la instalación de: $pkg"
+        fi
         return 1
     fi
 }

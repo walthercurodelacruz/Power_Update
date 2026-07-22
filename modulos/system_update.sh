@@ -1,5 +1,8 @@
 # === system_update.sh ===
 # Actualiza completamente el sistema según la distribución detectada
+
+set -o pipefail
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/update-$(date +%d-%H%M%S).log"

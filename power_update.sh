@@ -2,9 +2,16 @@
 # === power_update.sh (modificado) ===
 # Automatización modular post-instalación para Linux
 
+set -o pipefail
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 source "$SCRIPT_DIR/Global_functions.sh"
+
+# Solicitar credenciales sudo al inicio y mantenerlas activas
+echo -e "\033[1;34m[INFO]\033[0m Solicitando permisos de administrador para la instalación..."
+sudo -v || exit 1
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 clear
 DATE=$(date "+%A, %d de %B de %Y")

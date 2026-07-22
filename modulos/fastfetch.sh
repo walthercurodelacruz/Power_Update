@@ -1,6 +1,8 @@
 # === fastfetch.sh ===
 # Instala y configura fastfetch con un layout compacto básico
 
+set -o pipefail
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 mkdir -p "$SCRIPT_DIR/Install-Logs"
 LOG="$SCRIPT_DIR/Install-Logs/install-$(date +%d-%H%M%S)_fastfetch.log"
